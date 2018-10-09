@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.ibm.cloud</groupId>
+		<artifactId>boot-enterprise-parent</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../boot-enterprise-parent</relativePath>
+	</parent>
+
+	<artifactId>boot-enterprise-starter-parent</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+
+	<name>boot-enterprise-starter-parent</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<security-starter.version>1.0.0</security-starter.version>
+		<logging-starter.version>1.0.0</logging-starter.version>
+	</properties>
+
+
+
+	<modules>
+		<module>batch-starter</module>
+		<module>caching-starter</module>
+		<module>jdbc-data-starter</module>
+		<module>logging-starter</module>
+		<module>nosql-data-starter</module>
+		<module>security-starter</module>
+		<module>testing-starter</module>
+		<module>web-starter</module>
+	</modules>
+</project>

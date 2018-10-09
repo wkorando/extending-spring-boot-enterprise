@@ -9,16 +9,22 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ibm.cloud</groupId>
-	<artifactId>boot-enterprise-starter-parent</artifactId>
+	<artifactId>boot-enterprise-parent</artifactId>
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
-	<name>boot-enterprise-starter-parent</name>
+	<name>boot-enterprise-parent</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
 		<security-starter.version>1.0.0</security-starter.version>
 		<logging-starter.version>1.0.0</logging-starter.version>
+		<batch-starter.version>1.0.0</batch-starter.version>
+		<web-starter.version>1.0.0</web-starter.version>
+		<jdbc-data-starter.version>1.0.0</jdbc-data-starter.version>
+		<nosql-data-starter.version>1.0.0</nosql-data-starter.version>
+		<caching-starter.version>1.0.0</caching-starter.version>
+		<testing-starter.version>1.0.0</testing-starter.version>
 	</properties>
 
 	<dependencyManagement>
@@ -32,6 +38,36 @@
 				<groupId>com.ibm.cloud</groupId>
 				<artifactId>logging-starter</artifactId>
 				<version>${logging-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.cloud</groupId>
+				<artifactId>web-starter</artifactId>
+				<version>${web-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.cloud</groupId>
+				<artifactId>jdbc-data-starter</artifactId>
+				<version>${jdbc-data-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.cloud</groupId>
+				<artifactId>nosql-data-starter</artifactId>
+				<version>${nosql-data-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.cloud</groupId>
+				<artifactId>testing-starter</artifactId>
+				<version>${testing-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.cloud</groupId>
+				<artifactId>caching-starter</artifactId>
+				<version>${caching-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.ibm.cloud</groupId>
+				<artifactId>batch-starter</artifactId>
+				<version>${batch-starter.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -52,7 +88,7 @@
 								<bannedDependencies>
 									<searchTransitive>true</searchTransitive>
 									<excludes>
-										<exclude>mysql</exclude>
+										<exclude>junit:junit</exclude>
 									</excludes>
 								</bannedDependencies>
 								<requireMavenVersion>
