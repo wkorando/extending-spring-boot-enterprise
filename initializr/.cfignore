@@ -1,0 +1,13 @@
+.gradle
+*.sw?
+.#*
+*#
+*~
+.classpath
+.project
+.settings
+build
+target
+.springBeans
+tmp*
+spring.zip

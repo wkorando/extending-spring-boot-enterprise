@@ -1,0 +1,127 @@
+buildscript {
+	ext {
+		{{#buildPropertiesGradle}}
+		{{key}} = '{{value}}'
+		{{/buildPropertiesGradle}}
+	}
+	repositories {
+		mavenCentral()
+		{{^isRelease}}
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+		{{/isRelease}}
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		{{^bootOneThreeAvailable}}
+		classpath('io.spring.gradle:dependency-management-plugin:{{dependencyManagementPluginVersion}}')
+		{{/bootOneThreeAvailable}}
+		{{#kotlin}}
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+		{{#facets.jpa}}
+		classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+		{{/facets.jpa}}
+		{{/kotlin}}
+	}
+}
+
+apply plugin: '{{language}}'
+{{#kotlin}}
+apply plugin: 'kotlin-spring'
+{{#facets.jpa}}
+apply plugin: 'kotlin-jpa'
+{{/facets.jpa}}
+{{/kotlin}}
+{{#war}}
+apply plugin: 'eclipse-wtp'
+{{/war}}
+{{^war}}
+apply plugin: 'eclipse'
+{{/war}}
+apply plugin: '{{springBootPluginName}}'
+{{^bootOneThreeAvailable}}
+apply plugin: 'io.spring.dependency-management'
+{{/bootOneThreeAvailable}}
+{{#bootTwoZeroAvailable}}
+apply plugin: 'io.spring.dependency-management'
+{{/bootTwoZeroAvailable}}
+{{#war}}
+apply plugin: 'war'
+{{/war}}
+
+group = '{{groupId}}'
+version = '{{version}}'
+sourceCompatibility = {{javaVersion}}{{#kotlin}}
+compileKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]{{#java8OrLater}}
+		jvmTarget = "1.8"{{/java8OrLater}}
+	}
+}
+compileTestKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]{{#java8OrLater}}
+		jvmTarget = "1.8"{{/java8OrLater}}
+	}
+}{{/kotlin}}
+
+repositories {
+	mavenCentral()
+	{{#repositoryValues}}
+	maven { url "{{value.url}}" }
+	{{/repositoryValues}}
+}
+
+{{#providedDependencies}}
+configurations {
+	providedRuntime
+}
+{{/providedDependencies}}
+
+{{^buildPropertiesVersions.empty}}
+ext {
+	{{#buildPropertiesVersions}}
+	{{key}} = '{{value}}'
+{{/buildPropertiesVersions}}
+}
+
+{{/buildPropertiesVersions.empty}}
+dependencies {
+	{{#compileDependencies}}
+	{{gradleCompileConfig}}('{{groupId}}:{{artifactId}}{{#version}}:{{version}}{{/version}}{{#type}}@{{type}}{{/type}}')
+	{{/compileDependencies}}
+	{{#groovy}}
+	{{gradleCompileConfig}}('org.codehaus.groovy:groovy')
+	{{/groovy}}
+	{{#kotlin}}
+	{{gradleCompileConfig}}("org.jetbrains.kotlin:{{kotlinStdlibArtifactId}}{{^kotlinSupport}}:${kotlinVersion}{{/kotlinSupport}}")
+	{{gradleCompileConfig}}("org.jetbrains.kotlin:kotlin-reflect{{^kotlinSupport}}:${kotlinVersion}{{/kotlinSupport}}")
+	{{/kotlin}}
+	{{#runtimeDependencies}}
+	{{gradleRuntimeConfig}}('{{groupId}}:{{artifactId}}{{#version}}:{{version}}{{/version}}{{#type}}@{{type}}{{/type}}')
+	{{/runtimeDependencies}}
+	{{#compileOnlyDependencies}}
+	compileOnly('{{groupId}}:{{artifactId}}{{#version}}:{{version}}{{/version}}{{#type}}@{{type}}{{/type}}')
+	{{/compileOnlyDependencies}}
+	{{#annotationProcessorDependencies}}
+	annotationProcessor('{{groupId}}:{{artifactId}}{{#version}}:{{version}}{{/version}}{{#type}}@{{type}}{{/type}}')
+	{{/annotationProcessorDependencies}}
+	{{#providedDependencies}}
+	providedRuntime('{{groupId}}:{{artifactId}}{{#version}}:{{version}}{{/version}}{{#type}}@{{type}}{{/type}}')
+	{{/providedDependencies}}
+	{{gradleTestCompileConfig}}('org.springframework.boot:spring-boot-starter-test')
+	{{#testDependencies}}
+	{{gradleTestCompileConfig}}('{{groupId}}:{{artifactId}}{{#version}}:{{version}}{{/version}}{{#type}}@{{type}}{{/type}}')
+	{{/testDependencies}}
+}
+{{#hasBoms}}
+
+dependencyManagement {
+	imports {
+		{{#reversedBoms}}
+		mavenBom "{{groupId}}:{{artifactId}}:{{versionToken}}"
+		{{/reversedBoms}}
+	}
+}
+{{/hasBoms}}
